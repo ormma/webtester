@@ -1,0 +1,133 @@
+html, body {
+	height: 100%;
+	margin:0;
+}
+
+#tabs, #tabs-1, #tabs-2, #tabs-3 {
+	height: 43px;
+}
+/*
+ul {
+    list-style-type:none;
+    line-height:25px;
+}
+
+li[class~=selector] {
+    height:72px;
+    width:565px;
+}
+
+li[class~=selector] ul {
+    line-height:15px;
+    height:72px;
+    width:565px;
+}
+
+li[class~=selector] li {
+    float:left;
+    width:175px;
+}
+
+span[class~=name] {
+    font-weight:bold;
+}
+
+span[class~=value] {
+    position:absolute;
+    left:150px;
+}
+*/
+
+input[class~=dimension] {
+    width: 35px;
+}
+
+#adURI, #adFragment {
+    width:95%;
+}
+
+div[class~=consoleFrame] {
+    border: solid black 1px;
+    width:100%;
+    height:485px;
+    overflow-x:scroll;
+    overflow-y:scroll;
+}
+
+#deviceDiv {
+	float:left;
+	width:50%;
+}
+
+#devicePreviewDiv {
+	float:left;
+}
+
+#complianceDiv {
+	float:left;
+	width:50%;
+}
+
+#capabilitiesDiv {
+	float:left;
+	width:50%;
+}
+
+#consoleDiv {
+	width:50%;
+	float: right;
+}
+#consoleDiv, #controlsDiv {
+	width:50%;
+	float: left;
+}
+
+#clearDiv {
+	clear:left;
+}
+
+#title {
+	width:150px;
+	height:31px;
+	float:right;
+	margin:7px 5px 0px 0px;
+	font-size:x-large;
+}
+
+#logo {
+	background-image:url(../img/ormma-logo.jpg);
+	width:153px;
+	height:31px;
+	float:right;
+	margin:7px 5px 0px 0px;
+}
+.formValues {
+	margin-top:-33px;
+	margin-bottom:2px;
+}
+.formValues2 {
+	margin-top:-65px;
+	margin-bottom:2px;
+}
+
+.t-on {
+	background-image:url(../widgets/img/timer-on.gif);
+	background-repeat:no-repeat;
+	width:32px;
+	height:32px;
+}
+
+.t-off {
+	background-image:url(../widgets/img/timer-off.gif);
+	background-repeat:no-repeat;
+	width:32px;
+	height:32px;
+}
+
+.no-margin {
+	margin:0;
+}
+
+.ormma-widget {
+	margin-right:5px;
+}

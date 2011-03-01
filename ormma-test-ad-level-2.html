@@ -1,0 +1,399 @@
+<!-- Define our styles -->
+<style>
+
+   #expand {
+      position:absolute;
+      left:220px;
+      top:11px;
+   }
+
+
+   #expandedad { 
+      position:absolute; 
+      left:0px; 
+      top:0px;
+      clip:rect( 0, 300, 250, 0 ); 
+      display:none;
+   }
+
+   #expanddata {
+      position:absolute; 
+      left:15px; 
+      top:15px;
+      color:green;
+   }
+
+   #data {
+      position:absolute; 
+      left:20px; 
+      top:60px;
+      color:green;
+   }
+
+   img { 
+      border:none 
+   }
+
+   #shrink {
+      position:absolute;
+      left:255px;
+      top:5px;
+   }
+   
+   #ad {
+		margin:0px;
+		position:absolute; 
+		left:0px; 
+		top:0px;
+		}
+</style>
+
+
+<!-- Setup our Javascript -->
+<script language="javascript">
+
+
+   /**
+    * Primary entry point, fires when Ormma is ready.
+    * 
+    * Sets up an error event handler and populates initial screen data
+    *
+    * @requires Ormma
+    */
+   function ORMMAReady(){
+		ormma.addEventListener( 'error', handleErrorEvent );
+		ormma.addEventListener( 'stateChange', handleStateChangeEvent );
+		 showDefault();
+   }
+
+
+   /**
+    * Notifies the SDK that the default ad wishes to move to the expanded state.
+    *
+    * @requires Ormma
+    */
+   function expandAd() {
+      var pos = ormma.getDefaultPosition();
+	  var size = ormma.getSize();
+	  ormma.expand( { x: pos.x, 
+	                  y: pos.y, 
+					  width: size.width, 
+					  height : 250 } );
+   }
+
+
+   /**
+    * Handles ORMMA errors.
+    */
+   function handleErrorEvent( message, action ) {
+      var msg = "ORMMA ERROR ";
+	  if ( action != null ) {
+	     // error caused by an action	
+	     msg += "caused by action '" + action + "', ";
+      }
+      msg += "Message: " + message;
+ 	  alert(msg);
+   }
+
+   	/**
+    * Handles heading changes.
+    *
+    * @param {evt} Event, the error event
+    *
+    * @requires Ormma
+    */
+	function handleHeadingChangeEvent( heading ) {
+        var btn = document.controller.headingButton;
+		btn.value = "Heading: " + heading;
+	}
+
+   	/**
+    * Handles location changes.
+    *
+    * @param {evt} Event, the error event
+    *
+    * @requires Ormma
+    */
+
+	function handleLocationChangeEvent( lat, lon, acc ) {
+        var btn = document.controller.locationButton;
+		btn.value = "Location: [ " + lat + ", " + lon + " ]";
+	}
+
+   	/**
+    * Handles orientaion changes.
+    *
+    * @param {evt} Event, the error event
+    *
+    * @requires Ormma
+    */
+	function handleOrientationEvent( angle ) {
+        var btn = document.controller.orientationButton;
+		btn.value = "Orientation: " + angle;
+	}
+	
+   	/**
+    * Handles network state changes.
+    *
+    * @param {evt} Event, the error event
+    *
+    * @requires Ormma
+    */
+	function handleNetworkEvent( net ) {
+        var btn = document.controller.networkButton;
+		btn.value = "Network: " + ormma.getNetwork();
+	}
+
+
+   	/**
+    * Handles shake events.
+    */
+   	function handleShakeEvent() {
+		alert( "shook!" );
+   	}
+
+
+   	/**
+    * Handles state change events.
+    */
+   	function handleStateChangeEvent( state ) {
+	  if ( state === 'default' ) {
+	     showDefault();
+      }
+	  else if ( state === 'expanded' ) {
+	     showExpanded();
+      }
+   	}
+
+
+   	/**
+    * Handles tilt(accelerometer) changes.
+    * @requires Ormma
+    */
+   	function handleTiltChangeEvent( x, y, z ) {
+        var btn = document.controller.tiltButton;
+		btn.value = "Tilt: [ " + x + ", " + y + ", " + z + " ]";
+   	}
+
+	/**
+    * Makes a phone call
+    *
+    * @requires Ormma
+    */
+    function sendCall() {
+		ormma.makeCall( "8005551212" );
+   	}
+
+ 	/**
+    * creates a calendar event
+    *
+    * @requires Ormma
+    */
+   	function sendEvent() {
+		ormma.createEvent( new Date(), "title", "body" );
+   	}
+
+	/**
+    * Sends an email message
+    *
+    * @requires Ormma
+    */
+    function sendMail() {
+		ormma.sendMail( "jon.doe@example.com", "ormma", "test" );
+   	}
+
+
+ 	/**
+    * Sends an SMS message
+    *
+    * @requires Ormma
+    */
+	function sendSMS() {
+		ormma.sendSMS( "8005551212", "ORMMA" );
+	}
+   
+   
+   /**
+    * Causes the appropriate elements for the "default" state to be displayed.
+	*
+	* @requires: Ormma
+	*/
+   function showDefault() {
+      var banner = document.getElementById( 'banner' );
+      var expandedad = document.getElementById( 'expandedad' );
+      banner.style.display = 'block';
+      expandedad.style.display = 'none';
+   }
+   
+   
+   /**
+    * Causes the appropriate elements for the "expanded" state to be displayed.
+	*
+	* @requires: Ormma
+	*/
+   function showExpanded() {
+      var banner = document.getElementById( 'banner' );
+      var expandedad = document.getElementById( 'expandedad' );
+      banner.style.display = 'none';
+      expandedad.style.display = 'block';
+   }
+
+
+    /**
+	 * Handle the various toggle buttons on the ad
+	 */
+    var headingEnabled = false;
+    var locationEnabled = false;
+    var networkEnabled = false;
+    var orientationEnabled = false;
+    var shakeEnabled = false;
+    var tiltEnabled = false;
+
+    function toggleHeadingEnabled() {
+       headingEnabled = !headingEnabled;
+   
+       var lbl = "Heading: ";
+       var btn = document.controller.headingButton;
+       if ( headingEnabled ) {
+	      lbl += ormma.getHeading();
+	      ormma.addEventListener( 'headingChange', handleHeadingChangeEvent );
+       }
+       else {
+          // disable
+	     ormma.removeEventListener( 'headingChange', handleHeadingChangeEvent );
+	     lbl += "Off";
+       }
+	   btn.value = lbl;
+    }
+
+    function toggleLocationEnabled() {
+       locationEnabled = !locationEnabled;
+   
+       var lbl = "Location: ";
+       var btn = document.controller.locationButton;
+       if ( locationEnabled ) {
+	      var gps = ormma.getLocation();
+	      if ( gps == null ) {
+	         lbl += "searching...";
+	      }
+		  else {
+		     lbl += "[ " + gps.lat + ", " + gps.lon + " ]";
+		  }
+	      ormma.addEventListener( 'locationChange', handleLocationChangeEvent );
+       }
+       else {
+          // disable
+	     ormma.removeEventListener( 'locationChange', handleLocationChangeEvent );
+	     lbl += "Off";
+       }
+	   btn.value = lbl;
+    }
+
+    function toggleNetworkEnabled() {
+       networkEnabled = !networkEnabled;
+   
+       var lbl = "Network: ";
+       var btn = document.controller.networkButton;
+       if ( networkEnabled ) {
+	      lbl += ormma.getNetwork();
+	      ormma.addEventListener( 'networkChange', handleNetworkEvent );
+       }
+       else {
+          // disable
+	     ormma.removeEventListener( 'networkChange', handleNetworkEvent );
+	     lbl += "Off";
+       }
+	   btn.value = lbl;
+    }
+
+    function toggleOrientationEnabled() {
+       orientationEnabled = !orientationEnabled;
+   
+       var lbl = "Orientation: ";
+       var btn = document.controller.orientationButton;
+       if ( orientationEnabled ) {
+	      lbl += ormma.getOrientation();
+	      ormma.addEventListener( 'orientationChange', handleOrientationEvent );
+       }
+       else {
+          // disable
+		  lbl += "Off";
+	      ormma.removeEventListener( 'orientationChange', handleOrientationEvent );
+       }
+       btn.value = lbl;
+    }
+
+    function toggleShakeEnabled() {
+       shakeEnabled = !shakeEnabled;
+      
+       var lbl = "Shake: ";
+       var btn = document.controller.shakeButton;
+       if ( shakeEnabled ) {
+	      lbl += "On";
+	      ormma.addEventListener( 'shake', handleShakeEvent );
+       }
+       else {
+          // disable
+	     ormma.removeEventListener( 'shake', handleShakeEvent );
+	     lbl += "Off";
+       }
+       btn.value = lbl;
+    }
+
+
+    function toggleTiltEnabled() {
+       tiltEnabled = !tiltEnabled;
+   
+       var lbl = "Tilt: ";
+       var btn = document.controller.tiltButton;
+       if ( tiltEnabled ) {
+	      ormma.addEventListener( 'tiltChange', handleTiltChangeEvent );
+       }
+       else {
+          // disable
+	     ormma.removeEventListener( 'tiltChange', handleTiltChangeEvent );
+	     lbl += "Off";
+       }
+       btn.value = lbl;
+    }
+</script>
+
+<!-- The actual creative -->
+
+<div id='ad'>
+   <div id='banner'>
+      <img src="http://i.imwx.com/RealMedia/ads/Creatives/creative_repository/ormma/300x50-solid.png"
+           alt="banner advertisement" />
+      <div id='expand'>
+         <img src="http://i.imwx.com/RealMedia/ads/Creatives/creative_repository/ormma/expand.png"
+              alt="expand"
+              onclick="expandAd();" />
+      </div>
+   </div>
+
+   
+   <!-- The expanded ad (expanded state) -->
+   <div id='expandedad'>
+      <img src="http://i.imwx.com/RealMedia/ads/Creatives/creative_repository/ormma/300x250-solid.png"
+           alt="expanded ad" />
+      <div id='shrink'>
+         <img src="http://i.imwx.com/RealMedia/ads/Creatives/creative_repository/ormma/shrink.png"
+              alt="close"
+              onclick="ormma.close();" />
+      </div>
+      <div id='expanddata'>
+         <form name="controller">
+            <input type="button" name="callButton"        value="Place Call"       onclick="sendCall();"><br>
+            <input type="button" name="emailButton"       value="Send EMail"       onclick="sendMail();"><br>
+            <input type="button" name="textButton"        value="Send Text"        onclick="sendSMS();"><br>
+            <input type="button" name="calendarButton"    value="Add Event"        onclick="sendEvent();"><br>
+            <input type="button" name="networkButton"     value="Network: off"     onclick="toggleNetworkEnabled();"><br>
+            <input type="button" name="orientationButton" value="Orientation: off" onclick="toggleOrientationEnabled();"><br>
+            <input type="button" name="tiltButton"        value="Tilt: off"        onclick="toggleTiltEnabled();"><br>
+            <input type="button" name="shakeButton"       value="Shake: off"       onclick="toggleShakeEnabled();"><br>
+            <input type="button" name="headingButton"     value="Heading: off"     onclick="toggleHeadingEnabled();"><br>
+            <input type="button" name="locationButton"    value="Location: off"    onclick="toggleLocationEnabled();"><br>
+		</form> 
+      </div>
+   </div>
+</div>

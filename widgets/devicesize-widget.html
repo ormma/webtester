@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test ad size Widget</title>
+
+<link rel="stylesheet" href="css/devicesize-widget.css" type="text/css" />
+<link rel="stylesheet" href="../jquery/ui-lightness-jquery-ui.css" type="text/css" />	
+
+<script language="javascript" type="text/javascript" src="../jquery/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="../jquery/jquery-ui.min.js"></script>
+
+<script language="javascript" type="text/javascript" src="js/devicesize-widget.js" defer="defer"></script>
+
+<script>
+$(document).ready(function(){	
+	devicesizeWidget.init();	
+});
+</script>
+
+</head>
+
+<body>
+	<div id="formValues" style="float:left;width:50%">
+            <ul>
+                <li><span class="name">Screen Size:</span>
+                    <span class="value">
+                        <input id="screenWidth" name="screenWidth" class="dimension" value="480" onchange="devicesizeWidget.updatePreview()">x<input id="screenHeight" name="screenHeight" class="dimension" value="640" onchange="devicesizeWidget.updatePreview()">
+                        <input type="button" value="Swap" onclick="swapOrientation();devicesizeWidget.updatePreview()">
+                    </span>
+                </li>
+                <li><span class="name">Minimum ad area:</span>
+                    <span class="value">
+                        <input id="adWidth" name="adWidth" class="dimension" value="320" onchange="devicesizeWidget.updatePreview()">x<input id="adHeight" name="adHeight" class="dimension" value="50" onchange="devicesizeWidget.updatePreview()">
+                    </span>
+                </li>
+                <li><span class="name">Maximum ad area:</span>
+                    <span class="value">
+                        <input id="adMaxWidth" name="adMaxWidth" class="dimension" value="320">x<input id="adMaxHeight" name="adMaxHeight" class="dimension" value="600" onchange="devicesizeWidget.updatePreview()">
+                    </span>
+                </li>
+                <li><span class="name">Position:</span>
+                    <span class="value">
+                        <input id="adLeft" name="adLeft" class="dimension" value="10" onchange="devicesizeWidget.updatePreview()">,<input id="adTop" name="adTop" class="dimension" value="10" onchange="devicesizeWidget.updatePreview()">
+                    </span>
+                </li>
+            </ul>
+	</div>
+    
+    <div id="resizable-screensize" class="ui-widget-content" style="float:left">
+        <p class="ui-widget-header">screen size</p>
+        <div id="resizable-maxAdSize" class="ui-widget-content">
+            <p class="ui-widget-header">max ad area &amp; placement</p>
+            <div id="resizable-initialAdSize" class="ui-widget-content">
+                <p class="ui-widget-header">initial ad area &amp; placement</p>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

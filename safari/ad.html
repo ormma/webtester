@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta></head>
+<body style="margin:0px; padding:0px;">
+<script type="text/javascript">
+var i = document.cookie.indexOf('uri=') + 4;
+var j = document.cookie.indexOf(';', i);
+var uri = '';
+if (j == -1) {
+    uri = document.cookie.substring(i);
+} else {
+    uri = document.cookie.substring(i, j);
+}
+uri = decodeURIComponent(uri);
+var req = new XMLHttpRequest();
+req.open('GET', uri, false);
+req.send(null);
+document.write(req.responseText);
+</script>
+</body>
+</html>

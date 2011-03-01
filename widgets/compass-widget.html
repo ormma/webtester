@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test Compass Widget</title>
+
+<link rel="stylesheet" href="compass-widget.css" type="text/css" />
+
+<script language="javascript" type="text/javascript" src="jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="jquery-ui.min.js"></script>
+<script language="javascript" type="text/javascript" src="jquery.event.drag-1.5.min.js"></script>
+<script language="javascript" type="text/javascript" src="compass-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript">
+$(document).ready(function(){
+	compassWidget.init();	
+});
+</script>
+</head>
+
+<body>
+<div>asdf</div>
+<div>asdf</div>
+<div>asdf</div>
+<div>asdf</div>
+<div id="compass-widget" style="float:right"><div id="compass-dot"></div></div>
+<p>
+heading: <input type="text" name="heading" id="heading" />
+<input id="compassTiming" type="button" onclick="compassWidget.toggleCompassTiming()" value="t-off"/>
+</p>
+</body>
+</html>

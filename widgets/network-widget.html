@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test Network Widget</title>
+
+<link rel="stylesheet" href="network-widget.css" type="text/css" />
+
+<script language="javascript" type="text/javascript" src="jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="jquery-ui.min.js"></script>
+
+<script language="javascript" type="text/javascript" src="network-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript">
+$(document).ready(function(){
+	networkWidget.init();
+});
+</script>
+</head>
+
+<body>
+<div id="networkToggle" class="network3g up"></div>
+<select name="networkState" id="networkState">
+<option value="networkUnknown">network state unknown</option>
+<option value="networkNone">no network connection</option>
+<option value="network3g">cellular network connection</option>
+<option value="networkWifi">wireless network connection</option>
+</select>
+<input id="networkTiming" type="button" onclick="networkWidget.toggleNetworkTiming()" value="t-off"/>
+</body>
+</html>

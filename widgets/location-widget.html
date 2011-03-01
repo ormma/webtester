@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test Location Widget</title>
+
+<link rel="stylesheet" href="location-widget.css" type="text/css" />
+
+<script language="javascript" type="text/javascript" src="jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="jquery-ui.min.js"></script>
+
+<script language="javascript" type="text/javascript" src="location-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript">
+$(document).ready(function(){
+	locationWidget.init();	
+});
+</script>
+</head>
+
+<body>
+<div id="location-widget"><div id="location-target"></div></div>
+<p>lat: <input type="text" name="lat" id="lat" />, lng: <input type="text" name="lng" id="lng" /></p>
+<input id="locationTiming" type="button" onclick="locationWidget.toggleLocationTiming()" value="t-off"/>
+</body>
+</html>

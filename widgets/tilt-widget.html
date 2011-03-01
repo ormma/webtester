@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Test tilt Widget</title>
+
+<link rel="stylesheet" href="tilt-widget.css" type="text/css" />
+
+<script language="javascript" type="text/javascript" src="jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="jquery-ui.min.js"></script>
+
+<script language="javascript" type="text/javascript" src="tilt-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript" >
+$(document).ready(function(){	
+	tiltWidget.init();	
+});
+</script>
+</head>
+
+<body>
+<div id="tilt-widget"><div id="tilt-target-containment"><div id="tilt-target"></div></div><div id="z-marker"></div><div id="shake-hotspot" cursor="hand" onclick="shakeWidget.shakeIt()"></div></div>
+<p>roll (&gamma;): <input type="text" name="gammaValue" id="gammaValue" />, pitch (&beta;): <input type="text" name="betaValue" id="betaValue" />, yaw (&alpha;): <input type="text" name="alphaValue" id="alphaValue" /></p>
+<input id="shakeTiming" type="button" onclick="shakeWidget.toggleShakeTiming()" value="t-off"/>
+<input id="tiltTiming" type="button" onclick="tiltWidget.toggleTiltTiming()" value="t-off"/>
+</body>
+</html>

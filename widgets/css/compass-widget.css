@@ -1,0 +1,29 @@
+/* COMPASS */
+#headingDiv {
+	float:left;
+}
+#compass-widget {
+	background-image:url(../img/compass.png);
+	width:150px;
+	height:150px;
+	border:thin solid black;
+	clear:both;
+}
+
+#compass-dot {
+	background-image:url(../img/compass-dot.png);
+	background-position:center center;
+	background-repeat: no-repeat;
+	width:20px;
+	height:20px;
+	position: relative; 
+	left: 65px; 
+	top: 15px;
+}
+#compassTiming {
+	position:relative;
+	top:-151px;
+	left:1px;
+	margin:0;
+	padding:0;
+}

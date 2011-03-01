@@ -1,0 +1,30 @@
+/* LOCATION */
+#locationDiv {
+	float:left;
+}
+
+#location-widget {
+	background-image:url(../img/location.png);
+	width:225px;
+	height:150px;
+	border:thin solid black;
+	clear:both;
+}
+
+#location-target {
+	background-image:url(../img/location-crosshairs.png);
+	background-position:center center;
+	background-repeat: no-repeat;
+	width:20px;
+	height:20px;
+	position: relative; 
+	left: 59.12390651px; 
+	top: 32.70210925px;
+}
+#locationTiming {
+	position:relative;
+	top:-151px;
+	left:1px;
+	margin:0;
+	padding:0;
+}

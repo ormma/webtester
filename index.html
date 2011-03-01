@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>ORMMA Test Page</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="safari/main.css">
+    <script type="text/javascript" src="safari/ormmaview.js" language="javascript"></script>
+    <script type="text/javascript" src="safari/main.js" language="javascript"></script>
+    <script type="text/javascript" src="safari/devices.js"></script>
+
+	<!-- WIDGET RELATED -->
+    <link rel="stylesheet" href="jquery/ui-lightness-jquery-ui.css" type="text/css" />	
+    <link rel="stylesheet" href="widgets/css/devicesize-widget.css" type="text/css" />
+    <link rel="stylesheet" href="widgets/css/tilt-widget.css" type="text/css" />
+    <link rel="stylesheet" href="widgets/css/compass-widget.css" type="text/css" />
+    <link rel="stylesheet" href="widgets/css/keyboard-widget.css" type="text/css" />
+    <link rel="stylesheet" href="widgets/css/location-widget.css" type="text/css" />
+    <link rel="stylesheet" href="widgets/css/network-widget.css" type="text/css" />
+    <link rel="stylesheet" href="widgets/css/orientation-widget.css" type="text/css" />
+    
+    <!-- ONLINE
+    <script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+    <script language="javascript" type="text/javascript" src="http://threedubmedia.googlecode.com/files/jquery.event.drag-1.5.min.js"></script>
+    -->
+    
+    <!-- OFFLINE -->
+    <script language="javascript" type="text/javascript" src="jquery/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="jquery/jquery-ui.min.js"></script>
+    <script language="javascript" type="text/javascript" src="jquery/jquery.event.drag-1.5.min.js"></script>
+    
+    <script language="javascript" type="text/javascript" src="widgets/js/devicesize-widget.js" defer="defer"></script>
+    <script language="javascript" type="text/javascript" src="widgets/js/compass-widget.js" defer="defer"></script>
+    <script language="javascript" type="text/javascript" src="widgets/js/tilt-widget.js" defer="defer"></script>
+    <script language="javascript" type="text/javascript" src="widgets/js/keyboard-widget.js" defer="defer"></script>
+    <script language="javascript" type="text/javascript" src="widgets/js/location-widget.js" defer="defer"></script>
+    <script language="javascript" type="text/javascript" src="widgets/js/network-widget.js" defer="defer"></script>
+    <script language="javascript" type="text/javascript" src="widgets/js/orientation-widget.js" defer="defer"></script>
+    
+    <script language="javascript" type="text/javascript" defer="defer" >
+		$(document).ready(function(){	
+			$('#tabs').tabs();
+			$("#accordion").accordion({ header: "h3", autoHeight:false });
+			
+			devicesizeWidget.init();	
+			tiltWidget.init();	
+			compassWidget.init();	
+			keyboardWidget.init();	
+			locationWidget.init();	
+			networkWidget.init();	
+			orientationWidget.init();
+			
+			load();
+		});
+    </script>
+</head>
+
+<body>
+
+<form id="setup" name="setup" onsubmit="renderAd(this); return false">
+<div id="tabs">
+
+	<div id="logo" onclick="location.href='http://ormma.org/'"></div>
+	<div id="title">Web Tester</div>
+    <ul>
+        <li><a href="#tabs-1">Prepare</a></li>
+        <li><a href="#tabs-2">Flight</a></li>
+        <li><a href="#tabs-3">Test</a></li>
+    </ul>
+	<div id="tabs-1">
+    	<div id="deviceDiv">
+            <h2 class="no-margin">device</h2>
+            <span class="name">Template:</span>
+            <span class="value">
+                <select name="template" id="template" onchange="applyTemplate(this.value);devicesizeWidget.updatePreview();toggleWidgetVisibilityAll();">
+                <option value="" selected="">Apply Template...</option>
+                <script type="text/javascript">
+                        var options = [];
+                        for (var template in templates) {
+                            options.push('<option value="',template,'">',templates[template].name,'</option>');
+                        }
+                        document.write(options.join(''));
+               </script>
+               </select>
+           </span>
+                   
+            <ul>
+                <li><span class="name">Screen Size:</span>
+                    <span class="value">
+                        <input id="screenWidth" name="screenWidth" class="dimension" value="480" onchange="devicesizeWidget.updatePreview()">x<input id="screenHeight" name="screenHeight" class="dimension" value="640" onchange="devicesizeWidget.updatePreview()">
+                        <input type="button" value="Swap" onclick="swapOrientation();devicesizeWidget.updatePreview()">
+                    </span>
+                </li>
+                <li><span class="name">Minimum ad area:</span>
+                    <span class="value">
+                        <input id="adWidth" name="adWidth" class="dimension" value="320" onchange="devicesizeWidget.updatePreview()">x<input id="adHeight" name="adHeight" class="dimension" value="50" onchange="devicesizeWidget.updatePreview()">
+                    </span>
+                </li>
+                <li><span class="name">Maximum ad area:</span>
+                    <span class="value">
+                        <input id="adMaxWidth" name="adMaxWidth" class="dimension" value="320">x<input id="adMaxHeight" name="adMaxHeight" class="dimension" value="480" onchange="devicesizeWidget.updatePreview()">
+                    </span>
+                </li>
+                <li><span class="name">Position:</span>
+                    <span class="value">
+                        <input id="adLeft" name="adLeft" class="dimension" value="0" onchange="devicesizeWidget.updatePreview()">,<input id="adTop" name="adTop" class="dimension" value="0" onchange="devicesizeWidget.updatePreview()">
+                    </span>
+                </li>
+            </ul>
+            
+            <div id="complianceDiv">
+                <p>ORMMA compliance:</p>
+                <ul>
+                    <li><span class="name">Level 1:</span>
+                        <span class="value">
+                            <input name="level1" type="checkbox" checked="" onchange="document.forms.setup.level2.checked = this.checked; toggleLevel2(this.checked); toggleWidgetVisibilityAll()">
+                        </span>
+                    </li>
+                    <li><span class="name">Level 2:</span>
+                        <span class="value">
+                            <input name="level2" type="checkbox" checked="" onchange="toggleLevel2(this.checked); toggleWidgetVisibilityAll()">
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div id="capabilitiesDiv">
+                <p>Device capabilities:</p>
+                    <ul>
+                        <script type="text/javascript">
+                                var items = [];
+                                for (var feature in features) {
+                                    items.push('<li><input id="',feature,'" name="',feature,'" type="checkbox" checked="checked" onclick="toggleWidgetVisibility(this)" /> ',features[feature].name,'</li>');
+                                }
+                                document.write(items.join(''));
+                            </script>
+                    </ul>
+                <script type="text/javascript">
+                        document.forms.setup.template.value = 'iphone3g';
+                        applyTemplate('iphone3g');
+                </script>
+            </div>
+		</div>
+        <div id="devicePreviewDiv">
+            <div id="resizable-screensize" class="ui-widget-content" style="float:left">
+                <p class="ui-widget-header">screen size</p>
+                <div id="resizable-maxAdSize" class="ui-widget-content">
+                    <p class="ui-widget-header">max ad area &amp; placement</p>
+                    <div id="resizable-initialAdSize" class="ui-widget-content">
+                        <p class="ui-widget-header">initial ad area &amp; placement</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div id="tabs-2">
+    	<h2 class="no-margin">source</h2>
+        <div id="accordion">
+			<div>
+				<h3><a href="#">Test an HTML Ad</a></h3>
+				<div>
+                	<textarea name="adFragment" id="adFragment" rows="10">Your HTML fragment here</textarea>
+                    <input type="button" value="Render" onclick="renderHtmlAd()">
+                </div>                
+			</div>
+			<div>
+				<h3><a href="#">Test a URL</a></h3>
+				<div>
+                	<span class="name">URL:</span>
+                    <span class="value">
+                        <input name="adURI" id="adURI" class="uri" value="ormma-test-ad-level-2.html">
+                        <input name="fragment" type="checkbox" checked="checked"> Fragment?
+	                    <input type="submit" value="Render">
+                    </span>
+                </div>
+			</div>
+		</div>
+    </div>    
+	<div id="tabs-3">        
+        <div id="controlsDiv">
+            <h2 class="no-margin">controls</h2>
+            <div id="tiltDiv" class="ormma-widget">
+                <div id="tilt-widget"><div id="tilt-target-containment"><div id="tilt-target"></div></div><div id="z-marker"></div><div id="shake-hotspot" cursor="hand" onclick="shakeWidget.shakeIt()"></div></div>
+                <div id="shakeTiming" type="button" onclick="shakeWidget.toggleShakeTiming()" class="t-off"></div>
+                <div id="tiltTiming" type="button" onclick="tiltWidget.toggleTiltTiming()" class="t-off"></div>
+                <p class="formValues2"><span class="name" title="&gamma;">roll:</span><span class="value"><input name="gammaValue" type="text" id="gammaValue" size="4" maxlength="3" /></span><span class="name" title="&beta;">pitch:</span><span class="value"><input name="betaValue" type="text" id="betaValue" size="4" maxlength="3" /></span><span class="name" title="&alpha;">yaw</span>:<span class="value"><input name="alphaValue" type="text" id="alphaValue" size="4" maxlength="3" /></span>
+                </p>
+            </div>
+            
+            <div id="headingDiv" class="ormma-widget">
+                <div id="compass-widget"><div id="compass-dot"></div></div>
+                <div id="compassTiming" type="button" onclick="compassWidget.toggleCompassTiming()" class="t-off"></div>
+                <p class="formValues"><span class="name">heading:</span>
+                    <span class="value"><input name="compass" type="text" id="compass" value="180" size="6" maxlength="3" /></span>
+                </p>
+            </div>
+            
+            <div id="clearDiv"></div> 
+
+            <div id="locationDiv" class="ormma-widget">
+                <div id="location-widget"><div id="location-target"></div></div>
+                <div id="locationTiming" type="button" onclick="locationWidget.toggleLocationTiming()" class="t-off"></div>
+                <p class="formValues"><span class="name">lat:</span><span class="value"><input name="lat" type="text" id="lat" size="6" maxlength="3" /></span><span class="name">lng:</span><span class="value"><input name="lng" type="text" id="lng" size="6" maxlength="3" /></span><span class="name">acc:</span><span class="value"><input name="accuracy" size="6" maxlength="3" value="6" /></span>
+                </p>
+            </div>
+            
+            <div id="clearDiv"></div> 
+            
+            <div id="networkDiv" class="ormma-widget">
+                <div id="networkToggle" class="networkCELL up"></div>
+                <div id="networkTiming" type="button" onclick="networkWidget.toggleNetworkTiming()" class="t-off"></div>
+                <p class="formValues"><span class="value">
+                <select name="networkState" id="networkState">
+                    <script type="text/javascript">
+                        var statuses = []
+                        for (var status in ormmaview.NETWORK) statuses.push('<option value="',status,'">',status,'</option>');
+                        document.write(statuses.join(''));
+                    </script>
+                </select>
+                </span></p>
+            </div>
+            
+            <div id="orientationDiv" class="ormma-widget">
+                <div id="orientationToggle" class="portrait"></div>
+                <div id="orientationTiming" type="button" onclick="orientationWidget.toggleOrientationTiming()" class="t-off"></div>
+                <p class="formValues"><span class="value">
+                <select name="orientationState" id="orientationState">
+                  <option value="portrait">portrait</option>
+                  <option value="landscape">landscape</option>
+                </select>
+                </span>
+                </p>
+            </div>
+            
+            <div id="keyboardDiv" class="ormma-widget">
+                <div id="keyboardToggle"></div>
+                <div id="keyboardTiming" type="button" onclick="keyboardWidget.toggleKeyboardTiming()" class="t-off"></div>
+                <p class="formValues"><span class="value">
+                <select name="keyboardState" id="keyboardState">
+                    <option value="up">keyboard up</option>
+                    <option value="down" selected="selected">keyboard down</option>
+                </select>
+                </span>
+                </p>
+            </div>        
+        </div>
+        <div id="consoleDiv">
+            <h2 class="no-margin">console</h2>
+            <em><input id="logError" type="checkbox" checked=""> Error
+                <input id="logInfo" type="checkbox" checked=""> Info
+                <input type="button" value="Clear" onclick="document.getElementById('console').innerHTML = ''">
+            </em>
+            <div class="consoleFrame"><code id="console"></code></div>
+            <div id="refreshDiv">
+		        <!-- form name="refresh" onsubmit="refreshAd(this); return false" --><input type="submit" value="Reload Ad"><!-- /form -->
+        	</div>
+        </div>
+    </div>
+</div>
+</form>
+
+</body>
+</html>

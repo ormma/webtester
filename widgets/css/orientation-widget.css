@@ -1,0 +1,22 @@
+/* ORIENTATION */
+#orientationDiv {
+	float:left;
+}
+#orientationToggle {
+	background-image:url(../img/orientation-sprite.png);
+	background-position:0px -150px;
+	background-repeat:no-repeat;
+	width:150px;
+	height:150px;
+	border:thin solid black;
+}
+#orientationToggle.portrait {
+	background-position:0px 0px;
+}
+#orientationTiming {
+	position:relative;
+	top:-151px;
+	left:1px;
+	margin:0;
+	padding:0;
+}

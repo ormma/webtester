@@ -1,0 +1,30 @@
+/* NETWORK */
+#networkDiv {
+	float:left;
+}
+#networkToggle {
+	background-image:url(../img/network-sprite.png);
+	background-repeat:no-repeat;
+	width:150px;
+	height:150px;
+	border:thin solid black;
+}
+#networkToggle.networkUNKNOWN {
+	background-position:0px 0px;
+}
+#networkToggle.networkOFFLINE {
+	background-position:0px -150px;
+}
+#networkToggle.networkCELL {
+	background-position:0px -300px;
+}
+#networkToggle.networkWIFI {
+	background-position:0px -450px;
+}
+#networkTiming {
+	position:relative;
+	top:-151px;
+	left:1px;
+	margin:0;
+	padding:0;
+}

@@ -1,0 +1,49 @@
+/* TILT */
+#tiltDiv {
+	float:left;
+}
+
+#tilt-widget {
+	background-image:url(tilt-and-shake.png);
+	width:300px;
+	height:150px;
+	border:thin solid black;
+	clear:both;
+}
+
+#tilt-target {
+	background-image:url(tilt-target.png);
+	background-position:center center;
+	background-repeat: no-repeat;
+	width:40px;
+	height:40px;
+	position: relative; 
+	left: 55px; 
+	top: 55px;
+}
+
+#tilt-target-containment {
+	width:150px;
+	height:150px;
+	position:relative;
+	left:75px;
+}
+
+#z-marker {
+	background-image:url(tilt-z-marker.png);
+	background-position:center center;
+	background-repeat: no-repeat;
+	width:60px;
+	height:25px;
+	position: relative; 
+	left: 232px; 
+	top: -88px;
+}
+
+#shake-hotspot {
+	width:50px;
+	height:48px;
+	position: absolute; 
+	left: 17px; 
+	top: 103px;
+}

@@ -1,0 +1,10 @@
+/* DEVICE SIZE */
+	#resizable-screensize { width: 320px; height: 480px; background-color:#FFFFFF;}
+	#resizable-screensize>p { text-align: center; margin: 0; background-color:transparent; color:#58B6EC}
+
+	#resizable-maxAdSize { width: 318px; height: 318px; background-color:#58B6EC; position:absolute; top:0px; left:0px}
+	#resizable-maxAdSize>p { text-align: center; margin: 0; background-color:transparent}
+	
+	#resizable-initialAdSize { width: 316px; height: 46px; background-color:#EB8F00; position:absolute; top:0px; left:0px }
+	#resizable-initialAdSize>p { text-align: center; margin: 0; background-color:transparent}
+</style>

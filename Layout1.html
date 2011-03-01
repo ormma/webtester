@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Widget Gallery</title>
+
+<link rel="stylesheet" href="ui-lightness-jquery-ui.css" type="text/css" />	
+<link rel="stylesheet" href="tilt-widget.css" type="text/css" />
+<link rel="stylesheet" href="compass-widget.css" type="text/css" />
+<link rel="stylesheet" href="keyboard-widget.css" type="text/css" />
+<link rel="stylesheet" href="location-widget.css" type="text/css" />
+<link rel="stylesheet" href="network-widget.css" type="text/css" />
+<link rel="stylesheet" href="orientation-widget.css" type="text/css" />
+
+<!-- ONLINE
+<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
+<script language="javascript" type="text/javascript" src="http://threedubmedia.googlecode.com/files/jquery.event.drag-1.5.min.js"></script>
+-->
+
+<!-- OFFLINE -->
+<script language="javascript" type="text/javascript" src="jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="jquery-ui.min.js"></script>
+<script language="javascript" type="text/javascript" src="jquery.event.drag-1.5.min.js"></script>
+
+<script language="javascript" type="text/javascript" src="compass-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript" src="tilt-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript" src="keyboard-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript" src="location-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript" src="network-widget.js" defer="defer"></script>
+<script language="javascript" type="text/javascript" src="orientation-widget.js" defer="defer"></script>
+
+<script language="javascript" type="text/javascript" >
+$(document).ready(function(){	
+	$('#tabs').tabs();
+	$("#accordion").accordion({ header: "h3", autoHeight:false });
+	
+	tiltWidget.init();	
+	compassWidget.init();	
+	keyboardWidget.init();	
+	locationWidget.init();	
+	networkWidget.init();	
+	orientationWidget.init();	
+});
+</script>
+
+<style>
+#clearDiv {
+	clear:left;
+}
+
+#logo {
+	background-image:url(ormma-logo.jpg);
+	width:153px;
+	height:31px;
+	float:right;
+	margin:2px;
+}
+
+html, body, #tabs, #tabs-1, #tabs-2, #tabs-3 {
+	height: 100%;
+}
+
+.formValues {
+	margin-top:-25px;
+}
+
+.t-on {
+	background-image:url(timer-on.gif);
+	background-repeat:no-repeat;
+	width:32px;
+	height:32px;
+}
+
+.t-off {
+	background-image:url(timer-off.gif);
+	background-repeat:no-repeat;
+	width:32px;
+	height:32px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="tabs">
+	<div id="logo" onclick="location.href='http://ormma.org/'"></div>
+    <ul>
+        <li><a href="#tabs-1">Identify Device</a></li>
+        <li><a href="#tabs-2">Define Ad</a></li>
+        <li><a href="#tabs-3">Test</a></li>
+    </ul>
+	<div id="tabs-1">
+    	<p>Use this section to identify the device characters:</p>
+    	<ul>
+        	<li>Template:</li>
+            <li>Size:</li>
+            <li>ORMMA compliance:</li>
+            <li>Device capabilities:</li>
+            <li>Minimum ad area</li>
+            <li>Maximum ad area</li>
+        </ul>
+    </div>
+	<div id="tabs-2">
+    	<p>Provide your ad HTML or URL</p>
+        <div id="accordion">
+			<div>
+				<h3><a href="#">HTML</a></h3>
+				<div><textarea>Your HTML snippet here</textarea></div>
+			</div>
+			<div>
+				<h3><a href="#">URL</a></h3>
+				<div><input value="http://your/url.here"/></div>
+			</div>
+		</div>
+    </div>
+	<div id="tabs-3">
+    	<p>Control ad events</p>
+        <div id="tiltDiv">
+            <div id="tilt-widget"><div id="tilt-target-containment"><div id="tilt-target"></div></div><div id="z-marker"></div><div id="shake-hotspot" cursor="hand" onclick="shakeWidget.shakeIt()"></div></div>
+            <div id="shakeTiming" type="button" onclick="shakeWidget.toggleShakeTiming()" class="t-off"></div>
+			<div id="tiltTiming" type="button" onclick="tiltWidget.toggleTiltTiming()" class="t-off"></div>
+            <p class="formValues">roll/&gamma;: <input name="gammaValue" type="text" id="gammaValue" size="4" maxlength="3" />,pitch/&beta;: <input name="betaValue" type="text" id="betaValue" size="4" maxlength="3" />,yaw/&alpha;: <input name="alphaValue" type="text" id="alphaValue" size="4" maxlength="3" />
+            
+			</p>
+        </div>
+        
+        <div id="compassDiv">
+            <div id="compass-widget"><div id="compass-dot"></div></div>
+            <div id="compassTiming" type="button" onclick="compassWidget.toggleCompassTiming()" class="t-off"></div>
+            <p class="formValues">heading: 
+            <input name="heading" type="text" id="heading" value="180" size="6" maxlength="3" />
+            </p>
+        </div>
+        
+        <div id="locationDiv">
+            <div id="location-widget"><div id="location-target"></div></div>
+            <div id="locationTiming" type="button" onclick="locationWidget.toggleLocationTiming()" class="t-off"></div>
+            <p class="formValues">lat: <input name="lat" type="text" id="lat" size="6" maxlength="3" />, lng: <input name="lng" type="text" id="lng" size="6" maxlength="3" />
+			</p>
+        </div>
+        
+        <div id="clearDiv"/> 
+        
+        <div id="networkDiv">
+            <div id="networkToggle" class="network3g up"></div>
+            <div id="networkTiming" type="button" onclick="networkWidget.toggleNetworkTiming()" class="t-off"></div>
+            <p class="formValues">
+            <select name="networkState" id="networkState">
+              <option value="networkUnknown">state unknown</option>
+              <option value="networkNone">no connection</option>
+              <option value="network3g" selected="selected">cellular</option>
+              <option value="networkWifi">wirelesss</option>
+            </select>
+            </p>
+        </div>
+        
+        <div id="orientationDiv">
+            <div id="orientationToggle" class="portrait"></div>
+            <div id="orientationTiming" type="button" onclick="orientationWidget.toggleOrientationTiming()" class="t-off"></div>
+            <p class="formValues">
+            <select name="orientationState" id="orientationState">
+              <option value="portrait">portrait</option>
+              <option value="landscape">landscape</option>
+            </select>
+            </p>
+        </div>
+        
+        <div id="keyboardDiv">
+            <div id="keyboardToggle"></div>
+            <div id="keyboardTiming" type="button" onclick="keyboardWidget.toggleKeyboardTiming()" class="t-off"></div>
+            <p class="formValues">
+            <select name="keyboardState" id="keyboardState">
+                <option value="up">keyboard up</option>
+                <option value="down" selected="selected">keyboard down</option>
+            </select>
+            </p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

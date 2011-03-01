@@ -1,0 +1,22 @@
+/* KEYBOARD */
+#keyboardDiv {
+	float:left;
+}
+#keyboardToggle {
+	background-image:url(../img/keyboard-sprite.png);
+	background-position:0px 0px;
+	background-repeat:no-repeat;
+	width:150px;
+	height:150px;
+	border:thin solid black;
+}
+#keyboardToggle.up {
+	background-position:0px -150px;
+}
+#keyboardTiming {
+	position:relative;
+	top:-151px;
+	left:1px;
+	margin:0;
+	padding:0;
+}
