@@ -3,6 +3,16 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>ORMMA Test Page</title>
+<!--
+/*
+ *  Copyright (c) 2011 The ORMMA.org project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree. All contributing project authors may
+ *  be found in the AUTHORS file in the root of the source tree.
+ */
+-->
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="safari/main.css">
     <script type="text/javascript" src="safari/ormmaview.js" language="javascript"></script>
@@ -10,7 +20,7 @@
     <script type="text/javascript" src="safari/devices.js"></script>
 
 	<!-- WIDGET RELATED -->
-    <link rel="stylesheet" href="jquery/ui-lightness-jquery-ui.css" type="text/css" />	
+    <link rel="stylesheet" href="jquery/ui-lightness-jquery-ui.css" type="text/css" />
     <link rel="stylesheet" href="widgets/css/devicesize-widget.css" type="text/css" />
     <link rel="stylesheet" href="widgets/css/tilt-widget.css" type="text/css" />
     <link rel="stylesheet" href="widgets/css/compass-widget.css" type="text/css" />
@@ -18,18 +28,18 @@
     <link rel="stylesheet" href="widgets/css/location-widget.css" type="text/css" />
     <link rel="stylesheet" href="widgets/css/network-widget.css" type="text/css" />
     <link rel="stylesheet" href="widgets/css/orientation-widget.css" type="text/css" />
-    
+
     <!-- ONLINE
     <script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     <script language="javascript" type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.7/jquery-ui.min.js"></script>
     <script language="javascript" type="text/javascript" src="http://threedubmedia.googlecode.com/files/jquery.event.drag-1.5.min.js"></script>
     -->
-    
+
     <!-- OFFLINE -->
     <script language="javascript" type="text/javascript" src="jquery/jquery.min.js"></script>
     <script language="javascript" type="text/javascript" src="jquery/jquery-ui.min.js"></script>
     <script language="javascript" type="text/javascript" src="jquery/jquery.event.drag-1.5.min.js"></script>
-    
+
     <script language="javascript" type="text/javascript" src="widgets/js/devicesize-widget.js" defer="defer"></script>
     <script language="javascript" type="text/javascript" src="widgets/js/compass-widget.js" defer="defer"></script>
     <script language="javascript" type="text/javascript" src="widgets/js/tilt-widget.js" defer="defer"></script>
@@ -37,20 +47,20 @@
     <script language="javascript" type="text/javascript" src="widgets/js/location-widget.js" defer="defer"></script>
     <script language="javascript" type="text/javascript" src="widgets/js/network-widget.js" defer="defer"></script>
     <script language="javascript" type="text/javascript" src="widgets/js/orientation-widget.js" defer="defer"></script>
-    
+
     <script language="javascript" type="text/javascript" defer="defer" >
-		$(document).ready(function(){	
+		$(document).ready(function(){
 			$('#tabs').tabs();
 			$("#accordion").accordion({ header: "h3", autoHeight:false });
-			
-			devicesizeWidget.init();	
-			tiltWidget.init();	
-			compassWidget.init();	
-			keyboardWidget.init();	
-			locationWidget.init();	
-			networkWidget.init();	
+
+			devicesizeWidget.init();
+			tiltWidget.init();
+			compassWidget.init();
+			keyboardWidget.init();
+			locationWidget.init();
+			networkWidget.init();
 			orientationWidget.init();
-			
+
 			load();
 		});
     </script>
@@ -58,7 +68,7 @@
 
 <body>
 
-<form id="setup" name="setup" onsubmit="renderAd(this); return false">
+<form id="setup" name="setup" onsubmit="renderAd(); return false">
 <div id="tabs">
 
 	<div id="logo" onclick="location.href='http://ormma.org/'"></div>
@@ -84,7 +94,7 @@
                </script>
                </select>
            </span>
-                   
+
             <ul>
                 <li><span class="name">Screen Size:</span>
                     <span class="value">
@@ -108,7 +118,7 @@
                     </span>
                 </li>
             </ul>
-            
+
             <div id="complianceDiv">
                 <p>ORMMA compliance:</p>
                 <ul>
@@ -124,7 +134,7 @@
                     </li>
                 </ul>
             </div>
-            
+
             <div id="capabilitiesDiv">
                 <p>Device capabilities:</p>
                     <ul>
@@ -162,7 +172,7 @@
 				<div>
                 	<textarea name="adFragment" id="adFragment" rows="10">Your HTML fragment here</textarea>
                     <input type="button" value="Render" onclick="renderHtmlAd()">
-                </div>                
+                </div>
 			</div>
 			<div>
 				<h3><a href="#">Test a URL</a></h3>
@@ -171,13 +181,13 @@
                     <span class="value">
                         <input name="adURI" id="adURI" class="uri" value="ormma-test-ad-level-2.html">
                         <input name="fragment" type="checkbox" checked="checked"> Fragment?
-	                    <input type="submit" value="Render">
+	                    <input type="submit" value="Render" onclick="renderAd()">
                     </span>
                 </div>
 			</div>
 		</div>
-    </div>    
-	<div id="tabs-3">        
+    </div>
+	<div id="tabs-3">
         <div id="controlsDiv">
             <h2 class="no-margin">controls</h2>
             <div id="tiltDiv" class="ormma-widget">
@@ -187,7 +197,7 @@
                 <p class="formValues2"><span class="name" title="&gamma;">roll:</span><span class="value"><input name="gammaValue" type="text" id="gammaValue" size="4" maxlength="3" /></span><span class="name" title="&beta;">pitch:</span><span class="value"><input name="betaValue" type="text" id="betaValue" size="4" maxlength="3" /></span><span class="name" title="&alpha;">yaw</span>:<span class="value"><input name="alphaValue" type="text" id="alphaValue" size="4" maxlength="3" /></span>
                 </p>
             </div>
-            
+
             <div id="headingDiv" class="ormma-widget">
                 <div id="compass-widget"><div id="compass-dot"></div></div>
                 <div id="compassTiming" type="button" onclick="compassWidget.toggleCompassTiming()" class="t-off"></div>
@@ -195,18 +205,18 @@
                     <span class="value"><input name="compass" type="text" id="compass" value="180" size="6" maxlength="3" /></span>
                 </p>
             </div>
-            
-            <div id="clearDiv"></div> 
+
+            <div id="clearDiv"></div>
 
             <div id="locationDiv" class="ormma-widget">
                 <div id="location-widget"><div id="location-target"></div></div>
                 <div id="locationTiming" type="button" onclick="locationWidget.toggleLocationTiming()" class="t-off"></div>
-                <p class="formValues"><span class="name">lat:</span><span class="value"><input name="lat" type="text" id="lat" size="6" maxlength="3" /></span><span class="name">lng:</span><span class="value"><input name="lng" type="text" id="lng" size="6" maxlength="3" /></span><span class="name">acc:</span><span class="value"><input name="accuracy" size="6" maxlength="3" value="6" /></span>
+                <p class="formValues"><span class="name">lat:</span><span class="value"><input name="lat" type="text" id="lat" size="6" /></span><span class="name">lng:</span><span class="value"><input name="lng" type="text" id="lng" size="6"  /></span><span class="name">acc:</span><span class="value"><input name="accuracy" size="6" maxlength="3" value="6" /></span>
                 </p>
             </div>
-            
-            <div id="clearDiv"></div> 
-            
+
+            <div id="clearDiv"></div>
+
             <div id="networkDiv" class="ormma-widget">
                 <div id="networkToggle" class="networkCELL up"></div>
                 <div id="networkTiming" type="button" onclick="networkWidget.toggleNetworkTiming()" class="t-off"></div>
@@ -220,7 +230,7 @@
                 </select>
                 </span></p>
             </div>
-            
+
             <div id="orientationDiv" class="ormma-widget">
                 <div id="orientationToggle" class="portrait"></div>
                 <div id="orientationTiming" type="button" onclick="orientationWidget.toggleOrientationTiming()" class="t-off"></div>
@@ -232,7 +242,7 @@
                 </span>
                 </p>
             </div>
-            
+
             <div id="keyboardDiv" class="ormma-widget">
                 <div id="keyboardToggle"></div>
                 <div id="keyboardTiming" type="button" onclick="keyboardWidget.toggleKeyboardTiming()" class="t-off"></div>
@@ -243,7 +253,7 @@
                 </select>
                 </span>
                 </p>
-            </div>        
+            </div>
         </div>
         <div id="consoleDiv">
             <h2 class="no-margin">console</h2>

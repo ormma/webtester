@@ -1,3 +1,12 @@
+/*
+ *  Copyright (c) 2011 The ORMMA.org project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree. All contributing project authors may
+ *  be found in the AUTHORS file in the root of the source tree.
+ */
+
 //
 // Function: load()
 // Called by HTML body element's onload event when the web application is ready to start
@@ -74,22 +83,23 @@ function toggleLevel2(enabled) {
     form.camera.disabled = !enabled;
 };
 
-function renderAd(form) {
-/* @TODO: will need to put focus on TAB-3 */
+function renderAd() {
 
+	var form = document.forms.setup;
     prepareOrmmaView(form)
     ormmaview.setAdURI(form.adURI.value, form.fragment.checked);
 	ormmaview.setUseHtml(false);
     ormmaview.render();
+	$('#tabs').tabs().tabs('select', 2); // switch to third tab
 };
 
 function renderHtmlAd() {
-/* @TODO: will need to put focus on TAB-3 */
 
 	var form = document.forms.setup;
     prepareOrmmaView(form);
 	ormmaview.setUseHtml(true, form.adFragment.value);
 	ormmaview.render();
+	$('#tabs').tabs().tabs('select', 2); // switch to third tab
 }
 
 function prepareOrmmaView(form) {
@@ -97,6 +107,10 @@ function prepareOrmmaView(form) {
 no refresh form anymore
     document.forms.refresh.adURI.value = document.forms.setup.adURI.value;
     document.forms.refresh.fragment.checked = document.forms.setup.fragment.checked;
+
+Note: This must be served from a webserver when using Chrome, otherwise you'll
+      run into cross-domain limitations. For more information see:
+      http://74.125.153.99/support/forum/p/Chrome/thread?tid=0ba628caf22b4a31&hl=en
 */    
     ormmaview.setScreenSize(parseInt(form.screenWidth.value, 10), parseInt(form.screenHeight.value, 10));
     ormmaview.setDefaultPosition(parseInt(form.adLeft.value, 10), parseInt(form.adTop.value, 10), parseInt(form.adWidth.value, 10), parseInt(form.adHeight.value, 10));

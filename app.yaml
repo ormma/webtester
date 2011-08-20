@@ -1,0 +1,14 @@
+application: ormma-tester
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /
+  static_files: WebTester/index.html
+  upload: WebTester/index.html
+
+- url: /(.*)
+  static_files: WebTester/\1
+  upload: WebTester/(.*)
+  expiration: "1s"

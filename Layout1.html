@@ -3,8 +3,17 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Widget Gallery</title>
-
-<link rel="stylesheet" href="ui-lightness-jquery-ui.css" type="text/css" />	
+<!--
+/*
+ *  Copyright (c) 2011 The ORMMA.org project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree. All contributing project authors may
+ *  be found in the AUTHORS file in the root of the source tree.
+ */
+-->
+<link rel="stylesheet" href="ui-lightness-jquery-ui.css" type="text/css" />
 <link rel="stylesheet" href="tilt-widget.css" type="text/css" />
 <link rel="stylesheet" href="compass-widget.css" type="text/css" />
 <link rel="stylesheet" href="keyboard-widget.css" type="text/css" />
@@ -31,16 +40,16 @@
 <script language="javascript" type="text/javascript" src="orientation-widget.js" defer="defer"></script>
 
 <script language="javascript" type="text/javascript" >
-$(document).ready(function(){	
+$(document).ready(function(){
 	$('#tabs').tabs();
 	$("#accordion").accordion({ header: "h3", autoHeight:false });
-	
-	tiltWidget.init();	
-	compassWidget.init();	
-	keyboardWidget.init();	
-	locationWidget.init();	
-	networkWidget.init();	
-	orientationWidget.init();	
+
+	tiltWidget.init();
+	compassWidget.init();
+	keyboardWidget.init();
+	locationWidget.init();
+	networkWidget.init();
+	orientationWidget.init();
 });
 </script>
 
@@ -122,27 +131,27 @@ html, body, #tabs, #tabs-1, #tabs-2, #tabs-3 {
             <div id="shakeTiming" type="button" onclick="shakeWidget.toggleShakeTiming()" class="t-off"></div>
 			<div id="tiltTiming" type="button" onclick="tiltWidget.toggleTiltTiming()" class="t-off"></div>
             <p class="formValues">roll/&gamma;: <input name="gammaValue" type="text" id="gammaValue" size="4" maxlength="3" />,pitch/&beta;: <input name="betaValue" type="text" id="betaValue" size="4" maxlength="3" />,yaw/&alpha;: <input name="alphaValue" type="text" id="alphaValue" size="4" maxlength="3" />
-            
+
 			</p>
         </div>
-        
+
         <div id="compassDiv">
             <div id="compass-widget"><div id="compass-dot"></div></div>
             <div id="compassTiming" type="button" onclick="compassWidget.toggleCompassTiming()" class="t-off"></div>
-            <p class="formValues">heading: 
+            <p class="formValues">heading:
             <input name="heading" type="text" id="heading" value="180" size="6" maxlength="3" />
             </p>
         </div>
-        
+
         <div id="locationDiv">
             <div id="location-widget"><div id="location-target"></div></div>
             <div id="locationTiming" type="button" onclick="locationWidget.toggleLocationTiming()" class="t-off"></div>
             <p class="formValues">lat: <input name="lat" type="text" id="lat" size="6" maxlength="3" />, lng: <input name="lng" type="text" id="lng" size="6" maxlength="3" />
 			</p>
         </div>
-        
-        <div id="clearDiv"/> 
-        
+
+        <div id="clearDiv"/>
+
         <div id="networkDiv">
             <div id="networkToggle" class="network3g up"></div>
             <div id="networkTiming" type="button" onclick="networkWidget.toggleNetworkTiming()" class="t-off"></div>
@@ -155,7 +164,7 @@ html, body, #tabs, #tabs-1, #tabs-2, #tabs-3 {
             </select>
             </p>
         </div>
-        
+
         <div id="orientationDiv">
             <div id="orientationToggle" class="portrait"></div>
             <div id="orientationTiming" type="button" onclick="orientationWidget.toggleOrientationTiming()" class="t-off"></div>
@@ -166,7 +175,7 @@ html, body, #tabs, #tabs-1, #tabs-2, #tabs-3 {
             </select>
             </p>
         </div>
-        
+
         <div id="keyboardDiv">
             <div id="keyboardToggle"></div>
             <div id="keyboardTiming" type="button" onclick="keyboardWidget.toggleKeyboardTiming()" class="t-off"></div>
