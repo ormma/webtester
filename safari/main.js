@@ -44,7 +44,10 @@ var features = {
     phone:{ name:'Phone' },
     email:{ name:'Email' },
     calendar:{ name:'Calendar' },
-    camera:{ name:'Camera' }
+    camera:{ name:'Camera' },
+	map:{ name:'Map' },
+	audio: {name:'Audio'},
+	video: {name:'Video'}
 };
 
 function contains(array, item) {
@@ -81,6 +84,9 @@ function toggleLevel2(enabled) {
     form.email.disabled = !enabled;
     form.calendar.disabled = !enabled;
     form.camera.disabled = !enabled;
+    form.map.disabled = !enabled;
+    form.audio.disabled = !enabled;
+    form.video.disabled = !enabled;
 };
 
 function renderAd() {

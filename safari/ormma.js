@@ -9,21 +9,27 @@
 
 (function() {
     var ormma = window.ormma = {};
+	var mraid = window.mraid = {};
     
     // CONSTANTS ///////////////////////////////////////////////////////////////
     
     var STATES = ormma.STATES = {
         UNKNOWN     :'unknown',
+		LOADING		:'loading',
         DEFAULT     :'default',
         RESIZED     :'resized',
         EXPANDED    :'expanded',
         HIDDEN      :'hidden'
     };
+	mraid.STATES = {
+		LOADING		:'loading',
+        DEFAULT     :'default',
+        EXPANDED    :'expanded',
+        HIDDEN      :'hidden'	
+	};
     
     var EVENTS = ormma.EVENTS = {
-        ASSETREADY          :'assetReady',
-        ASSETREMOVED        :'assetRemoved',
-        ASSETRETIRED        :'assetRetired',
+		READY				:'ready',
         ERROR               :'error',
         INFO                :'info',
         HEADINGCHANGE       :'headingChange',
@@ -36,20 +42,20 @@
         SHAKE               :'shake',
         SIZECHANGE          :'sizeChange',
         STATECHANGE         :'stateChange',
-        TILTCHANGE          :'tiltChange'
+        TILTCHANGE          :'tiltChange',
+ 		VIEWABLECHANGE		:'viewableChange'
     };
-    
-    var CONTROLS = ormma.CONTROLS = {
-        BACK    :'back',
-        FORWARD :'forward',
-        REFRESH :'refresh',
-        ALL     :'all'
-    };
+	mraid.EVENTS = {
+		READY				:'ready',
+        ERROR               :'error',
+        INFO                :'info',
+        STATECHANGE         :'stateChange',
+ 		VIEWABLECHANGE		:'viewableChange'
+	};
     
     var FEATURES = ormma.FEATURES = {
         LEVEL1      :'level-1',
         LEVEL2      :'level-2',
-        LEVEL3      :'level-3',
         SCREEN      :'screen',
         ORIENTATION :'orientation',
         HEADING     :'heading',
@@ -61,7 +67,10 @@
         PHONE       :'phone',
         EMAIL       :'email',
         CALENDAR    :'calendar',
-        CAMERA      :'camera'
+        CAMERA      :'camera',
+		MAP			:'map',
+		AUDIO		:'audio',
+		VIDEO		:'video'
     };
     
     var NETWORK = ormma.NETWORK = {
@@ -93,16 +102,18 @@
     };
     
     var expandProperties = {
+		width:0,
+		height:0,
+		useCustomClose:false,
+		isModal:true,
         useBackground:false,
         backgroundColor:0xffffff,
-        backgroundOpacity:1.0,
-        isModal:false
+        backgroundOpacity:1.0
     };
     
     var supports = {
         'level-1':true,
         'level-2':true,
-        'level-3':true,
         'screen':true,
         'orientation':true,
         'heading':true,
@@ -114,7 +125,10 @@
         'phone':true,
         'email':true,
         'calendar':true,
-        'camera':true
+        'camera':true,
+		'map':true,
+		'audio':true,
+		'video':true
     };
     
     var heading = -1;
@@ -142,7 +156,9 @@
     var intervalID = null;
     var timeoutID = null;
     var readyTimeout = 10000;
+	var readyInterval = 750;
     
+	//@TODO: don't think I need dimension validators anymore
     var dimensionValidators = {
         x:function(value) { return !isNaN(value); },
         y:function(value) { return !isNaN(value); },
@@ -150,16 +166,21 @@
         height:function(value) { return !isNaN(value) && value >= 0; }
     };
     
+	//@TODO: ok to allow ads that are larger than maxSize
     var sizeValidators = {
         width:function(value) { return !isNaN(value) && value >= 0 && value <= maxSize.width; },
         height:function(value) { return !isNaN(value) && value >= 0 && value <= maxSize.height; }
     };
     
+	//@TODO: there are more expand properties
     var expandPropertyValidators = {
         useBackground:function(value) { return (value === true || value === false); },
         backgroundColor:function(value) { return (typeof value == 'string' && value.substr(0,1) == '#' && !isNaN(parseInt(value.substr(1), 16))); },
         backgroundOpacity:function(value) { return !isNaN(value) && value >= 0 && value <= 1; },
-        isModal:function(value) { return (value === true || value === false); }
+        isModal:function(value) { return (value === true || value === false); },
+		useCustomClose:function(value) { return (value === true || value === false); }, 
+		width:function(value) { return !isNaN(value) && value >= 0; }, 
+		height:function(value) { return !isNaN(value) && value >= 0; }	
     };
     
     var shakePropertyValidators = {
@@ -170,13 +191,17 @@
     var changeHandlers = {
         state:function(val) {
             if (state == STATES.UNKNOWN && val != STATES.UNKNOWN) {
-                timeoutID = window.setTimeout(ormma.readyTimeout, readyTimeout);
-                intervalID = window.setInterval(ormma.signalReady, 20);
-                broadcastEvent(EVENTS.INFO, 'controller initialized, attempting callback');
+                broadcastEvent(EVENTS.INFO, 'controller initialized');
             }
-            broadcastEvent(EVENTS.INFO, 'setting state to ' + stringify(val));
-            state = val;
-            broadcastEvent(EVENTS.STATECHANGE, state);
+			if (state == STATES.LOADING && val != STATES.LOADING) {
+                timeoutID = window.setTimeout(ormma.readyTimeout, readyTimeout);
+                intervalID = window.setInterval(ormma.signalReady, readyInterval);
+                broadcastEvent(EVENTS.INFO, 'controller ready, attempting callback');
+			} else {
+				broadcastEvent(EVENTS.INFO, 'setting state to ' + stringify(val));
+				state = val;
+				broadcastEvent(EVENTS.STATECHANGE, state);
+			}
         },
         size:function(val) {
             broadcastEvent(EVENTS.INFO, 'setting size to ' + stringify(val));
@@ -242,10 +267,6 @@
             broadcastEvent(EVENTS.INFO, 'setting tilt to ' + stringify(val));
             tilt = val;
             broadcastEvent(EVENTS.TILTCHANGE, tilt.x, tilt.y, tilt.z);
-        },
-        cacheRemaining:function(val) {
-            broadcastEvent(EVENTS.INFO, 'setting cacheRemaining to ' + stringify(val));
-            cacheRemaining = val;
         }
     };
     
@@ -310,23 +331,6 @@
     
     ormmaview.addEventListener('response', function(uri, response) {
         broadcastEvent(EVENTS.RESPONSE, uri, response);
-    });
-    
-    ormmaview.addEventListener('assetReady', function(alias, URL) {
-        assets[alias] = URL;
-        broadcastEvent(EVENTS.ASSETREADY, alias);
-    });
-    
-    ormmaview.addEventListener('assetRemoved', function(alias) {
-        assets[alias] = null;
-        delete assets[alias];
-        broadcastEvent(EVENTS.ASSETREMOVED, alias);
-    });
-    
-    ormmaview.addEventListener('assetRetired', function(alias) {
-        assets[alias] = null;
-        delete assets[alias];
-        broadcastEvent(EVENTS.ASSETRETIRED, alias);
     });
     
     var clone = function(obj) {
@@ -397,19 +401,30 @@
     
     ormma.readyTimeout = function() {
         window.clearInterval(intervalID);
-        broadcastEvent(EVENTS.ERROR, 'No ORMMAReady callback found (timeout of ' + readyTimeout + 'ms occurred)');
+        window.clearTimeout(timeoutID);
+        if (!ormmaview.scriptFound) {
+			broadcastEvent(EVENTS.INFO, 'No ORMMAReady callback found (timeout of ' + readyTimeout + 'ms occurred), assume use of ready eventListener.');
+		}
     };
     
     ormma.signalReady = function() {
+		broadcastEvent(EVENTS.INFO, 'setting state to ' + stringify(STATES.DEFAULT));
+		state = STATES.DEFAULT;
+		broadcastEvent(EVENTS.STATECHANGE, state);
+		
+		broadcastEvent(EVENTS.INFO, 'ready eventListener triggered');
+		broadcastEvent(EVENTS.READY, 'ormma ready event triggered');
+		broadcastEvent(mraid.EVENTS.READY, 'mraid ready event triggered');
+        window.clearInterval(intervalID);
         try {
             ORMMAReady();
-            window.clearInterval(intervalID);
             window.clearTimeout(timeoutID);
-            broadcastEvent(EVENTS.INFO, 'callback invoked');
+            broadcastEvent(EVENTS.INFO, 'ORMMA callback invoked');
         } catch (e) {
+			//ignore errors, will try again soon and then timeout
         }
     };
-    
+	
     ormma.info = function(message) {
         broadcastEvent(EVENTS.INFO, message);
     };
@@ -434,6 +449,9 @@
     };
     
     ormma.expand = function(dimensions, URL) {
+		if (dimensions === undefined) {
+			dimensions = {width:ormma.getMaxSize().width, height:ormma.getMaxSize().height, x:0, y:0};
+		}
         broadcastEvent(EVENTS.INFO, 'expanding to ' + stringify(dimensions));
         if (valid(dimensions, dimensionValidators, 'expand', true)) {
             ormmaview.expand(dimensions, URL);
@@ -452,8 +470,6 @@
         return clone(maxSize);
     };
     
-    // ormma.getResizeProperties = function() {};
-    
     ormma.getSize = function() {
         return clone(size);
     };
@@ -462,6 +478,10 @@
         return state;
     };
     
+	ormma.getVersion = function() {
+		return ("1.1.0");
+	};
+	
     ormma.hide = function() {
         if (state == STATES.HIDDEN) {
             broadcastEvent(EVENTS.ERROR, 'Ad is currently hidden.', 'hide');
@@ -520,8 +540,12 @@
             broadcastEvent(EVENTS.ERROR, 'Ad is currently visible.', 'show');
         } else {
             ormmaview.show();
-        }
+	        }
     };
+	
+	ormma.useCustomClose = function() {
+		//@TODO
+	}
     
     // LEVEL 2 ////////////////////////////////////////////////////////////////////
     
@@ -644,41 +668,6 @@
         }
     };
     
-    // LEVEL 3 ////////////////////////////////////////////////////////////////////
-    
-    ormma.addAsset = function(URL, alias) {
-        if (!URL || !alias || typeof URL != 'string' || typeof alias != 'string') {
-            broadcastEvent(EVENTS.ERROR, 'URL and alias are required.', 'addAsset');
-        } else if (supports[FEATURES.LEVEL3]) {
-            ormmaview.addAsset(URL, alias);
-        } else if (URL.indexOf('ormma://') == 0) {
-            broadcastEvent(EVENTS.ERROR, 'Native device assets not supported by this client.', 'addAsset');
-        } else {
-            assets[alias] = URL;
-            broadcastEvent(EVENTS.ASSETREADY, alias);
-        }
-    };
-    
-    ormma.addAssets = function(assets) {
-        for (var alias in assets) {
-            ormma.addAsset(assets[alias], alias);
-        }
-    };
-    
-    ormma.getAssetURL = function(alias) {
-        if (!assets[alias]) {
-            broadcastEvent(EVENTS.ERROR, 'Alias unknown.', 'getAssetURL');
-        }
-        return assets[alias];
-    };
-    
-    ormma.getCacheRemaining = function() {
-        if (!supports[FEATURES.LEVEL3]) {
-            broadcastEvent(EVENTS.ERROR, 'Method not supported by this client.', 'getCacheRemaining');
-        }
-        return cacheRemaining;
-    };
-    
     ormma.request = function(uri, display) {
         if (!supports[FEATURES.LEVEL3]) {
             broadcastEvent(EVENTS.ERROR, 'Method not supported by this client.', 'request');
@@ -688,24 +677,31 @@
             ormmaview.request(uri, display);
         }
     };
-    
-    ormma.removeAllAssets = function() {
-        for (var alias in assets) {
-            ormma.removeAsset(alias);
-        }
+	
+// MRAID ////////////////////
+    mraid.readyTimeout = function() {
+        window.clearInterval(intervalID);
+        broadcastEvent(EVENTS.ERROR, 'No MRAID ready listener found (timeout of ' + readyTimeout + 'ms occurred)');
     };
     
-    ormma.removeAsset = function(alias) {
-        if (!alias || typeof alias != 'string') {
-            broadcastEvent(EVENTS.ERROR, 'Alias is required.', 'removeAsset');
-        } else if (!assets[alias]) {
-            broadcastEvent(EVENTS.ERROR, 'Alias unknown.', 'removeAsset');
-        } else if (supports[FEATURES.LEVEL3]) {
-            ormmaview.removeAsset(alias);
-        } else {
-            assets[alias] = null;
-            delete assets[alias];
-            broadcastEvent(EVENTS.ASSETREMOVED, alias);
-        }
-    };
+	mraid.getVersion = function() {
+		return ('1.0');
+	};
+	
+    
+	mraid.addEventListener = ormma.addEventListener;
+	mraid.close = ormma.close;
+	mraid.expand = ormma.expand;
+	mraid.getExpandProperties = ormma.getExpandProperties;
+	mraid.getState = ormma.getState;
+	mraid.open = ormma.open;
+	mraid.removeEventListener = ormma.removeEventListener;
+	mraid.setExpandProperties = ormma.setExpandProperties;
+	mraid.useCustomClose = ormma.useCustomClose;
+
+	mraid.error = ormma.error;
+	//@TODO: mraid.stateChange
+	//@TODO: mraid.ready
+	//@TODO: mraid.viewableChange
+    
 })();

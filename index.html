@@ -98,7 +98,7 @@
             <ul>
                 <li><span class="name">Screen Size:</span>
                     <span class="value">
-                        <input id="screenWidth" name="screenWidth" class="dimension" value="480" onchange="devicesizeWidget.updatePreview()">x<input id="screenHeight" name="screenHeight" class="dimension" value="640" onchange="devicesizeWidget.updatePreview()">
+                        <input id="screenWidth" name="screenWidth" class="dimension" value="320" onchange="devicesizeWidget.updatePreview()">x<input id="screenHeight" name="screenHeight" class="dimension" value="480" onchange="devicesizeWidget.updatePreview()">
                         <input type="button" value="Swap" onclick="swapOrientation();devicesizeWidget.updatePreview()">
                     </span>
                 </li>
@@ -120,14 +120,19 @@
             </ul>
 
             <div id="complianceDiv">
-                <p>ORMMA compliance:</p>
+                <p>API to test:</p>
                 <ul>
-                    <li><span class="name">Level 1:</span>
+                    <li><span class="name">MRAID v1:</span>
                         <span class="value">
-                            <input name="level1" type="checkbox" checked="" onchange="document.forms.setup.level2.checked = this.checked; toggleLevel2(this.checked); toggleWidgetVisibilityAll()">
+                            <input name="mraid" type="checkbox" checked="" onchange="toggleWidgetVisibilityAll()">
                         </span>
                     </li>
-                    <li><span class="name">Level 2:</span>
+                    <li><span class="name">ORMMA Level 1:</span>
+                        <span class="value">
+                            <input name="level1" type="checkbox" checked="" onchange="toggleWidgetVisibilityAll()">
+                        </span>
+                    </li>
+                    <li><span class="name">ORMMA Level 2:</span>
                         <span class="value">
                             <input name="level2" type="checkbox" checked="" onchange="toggleLevel2(this.checked); toggleWidgetVisibilityAll()">
                         </span>

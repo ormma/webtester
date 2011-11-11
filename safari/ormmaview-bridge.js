@@ -9,6 +9,7 @@
 
 (function() {
     var ormmaview = window.ormmaview = {};
+	ormmaview.scriptFound = false;
     
     var listeners = {};
     
@@ -22,6 +23,8 @@
         }
     }
     
+	ormmaview.broadcastEvent = broadcastEvent;
+	
     ormmaview.addEventListener = function(event, listener, scope) {
         var key = String(listener) + String(scope);
         var map = listeners[event]
@@ -50,19 +53,12 @@
     ormmaview.pushError = function(message, action) {
         broadcastEvent('error', message, action);
     };
+	ormmaview.pushInfo = function(message) {
+		broadcastEvent('info', message);
+	};
     ormmaview.pushResponse = function(uri, response) {
         broadcastEvent('response', uri, response);
     };
-    ormmaview.pushAssetReady = function(alias, URL) {
-        broadcastEvent('assetReady', alias, URL);
-    };
-    ormmaview.pushAssetRemoved = function(alias) {
-        broadcastEvent('assetRemoved', alias);
-    };
-    ormmaview.pushAssetRetired = function(alias) {
-        broadcastEvent('assetRetired', alias);
-    };
-    
     ormmaview.activate = function(service) {
         broadcastEvent('activate', service);
     };
@@ -105,13 +101,7 @@
     ormmaview.setShakeProperties = function(properties) {
         broadcastEvent('setShakeProperties', properties);
     };
-    ormmaview.addAsset = function(URL, alias) {
-        broadcastEvent('addAsset', URL, alias);
-    };
     ormmaview.request = function(uri, display) {
         broadcastEvent('request', uri, display);
-    };
-    ormmaview.removeAsset = function(alias) {
-        broadcastEvent('removeAsset', alias);
     };
 })();

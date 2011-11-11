@@ -6,7 +6,52 @@
  *  tree. All contributing project authors may
  *  be found in the AUTHORS file in the root of the source tree.
  */
+ 
+ 
+ /* 
+  * Code flow is
+  * (1) buttons on interface call render()
+INFO rendering
+INFO creating adWindow
+  *   (.) onload event of new browser window	
+INFO adWindow loaded  
+  *   (a) renderAd - Flight tab>ad fragment
+  *   (b) renderHtmlAd - Flight tab>ad url
+  *   (c) reloadAd - Test tab
+  * (2) render() calls initAdFrame()
+INFO initializing ad frame  
+  * (3) initAdFrame() calls initAdBridge()
+INFO initializing bridge object [object Object]
+  * (4) initAdBridge() calls
+  *   (a) EventListeners.add for info reporting
+INFO activating info
+  *   (b) EventListeners.add for error reporting
+INFO activating error
+  *   (c) pushChange() for initialization of all other properties
+INFO controller initialized
+INFO setting state to loading
+INFO setting screenSize to {'width':320,'height':480}
+INFO setting orientation to 0
+INFO setting size to {'width':320,'height':50}
+INFO setting default position to {'width':320,'height':50,'y':0,'x':0}
+INFO setting maxSize to {'width':320,'height':480}
+INFO merging expandProperties with {'width':0,'height':0,'useCustomClose':false,'isModal':false,'useBackground':false,'backgroundColor':16777215,'backgroundOpacity':1}
+INFO setting supports to [screen]
 
+  * (5) pushChange() calls the addEventListener() method in ormma.js
+  * (6) addEventListener() calls changeHandlers.[listener]
+  * (7) changeHandlers.state() in ormma.js attempts to call ORMMAReady through signalReady
+  *   (a) attempt callback for ORMMAReady
+INFO controller ready, attempting callback
+  *   (b) send ready event
+INFO activating ready
+  * (8) identification script loaded
+INFO mraid.js identification script found
+  * (9) readyTimeout() in ormma.js errors when attempts to call ORMMAReady time out
+INFO No ORMMAReady callback found (timeout of 10000ms occurred), assume use of ready eventListener.
+  */
+
+  
 (function() {
     var ormmaview = window.ormmaview = {};
     
@@ -14,6 +59,7 @@
     
     var STATES = ormmaview.STATES = {
         UNKNOWN     :'unknown',
+		LOADING		:'loading',
         DEFAULT     :'default',
         RESIZED     :'resized',
         EXPANDED    :'expanded',
@@ -21,9 +67,7 @@
     };
     
     var EVENTS = ormmaview.EVENTS = {
-        ASSETREADY          :'assetReady',
-        ASSETREMOVED        :'assetRemoved',
-        ASSETRETIRED        :'assetRetired',
+		READY				:'ready',
         ERROR               :'error',
         INFO                :'info',
         HEADINGCHANGE       :'headingChange',
@@ -36,20 +80,13 @@
         SHAKE               :'shake',
         SIZECHANGE          :'sizeChange',
         STATECHANGE         :'stateChange',
-        TILTCHANGE          :'tiltChange'
-    };
-    
-    var CONTROLS = ormmaview.CONTROLS = {
-        BACK    :'back',
-        FORWARD :'forward',
-        REFRESH :'refresh',
-        ALL     :'all'
+        TILTCHANGE          :'tiltChange',
+ 		VIEWABLECHANGE		:'viewableChange'
     };
     
     var FEATURES = ormmaview.FEATURES = {
         LEVEL1      :'level-1',
         LEVEL2      :'level-2',
-        LEVEL3      :'level-3',
         SCREEN      :'screen',
         ORIENTATION :'orientation',
         HEADING     :'heading',
@@ -61,7 +98,10 @@
         PHONE       :'phone',
         EMAIL       :'email',
         CALENDAR    :'calendar',
-        CAMERA      :'camera'
+        CAMERA      :'camera',
+		MAP			:'map',
+		AUDIO		:'audio',
+		VIDEO		:'video'
     };
     
     var NETWORK = ormmaview.NETWORK = {
@@ -84,6 +124,8 @@
             handler.func.apply(handler.func.scope, args);
         }
     }
+	
+	ormmaview.broadcastEvent = broadcastEvent;
     
     ormmaview.addEventListener = function(event, listener, scope) {
         var key = String(listener) + String(scope);
@@ -126,16 +168,15 @@
     
     // ORMMA state variables - shared with frame
     var
-        state = STATES.DEFAULT,
+        state = STATES.LOADING,
         screenSize = { width:0, height:0 },
         size = { width:0, height:0 },
         defaultPosition = { width:0, height:0, y:0, x:0 },
         maxSize = { width:0, height:0 },
-        expandProperties = { useBackground:false, backgroundColor:0xffffff, backgroundOpacity:1.0, isModal:false },
+        expandProperties = { width:0, height:0, useCustomClose:false, isModal:false, useBackground:false, backgroundColor:0xffffff, backgroundOpacity:1.0},
         supports = [
             'level-1',
             'level-2',
-            'level-3',
             'screen',
             'orientation',
             'heading',
@@ -147,7 +188,10 @@
             'phone',
             'email',
             'calendar',
-            'camera'
+            'camera',
+			'map',
+			'audio',
+			'video'
         ],
         heading = -1,
         keyboardState = false,
@@ -155,9 +199,7 @@
         network = NETWORK.UNKNOWN,
         orientation = -1,
         shakeProperties = null,
-        tilt = null,
-        assets = {},
-        cacheRemaining = -1;
+        tilt = null;
     
     // PUBLIC ACCESSOR METHODS ///////////////////////////////////////////////////////////////
     
@@ -377,7 +419,7 @@
         previousPosition = { x:0, y:0, width:0, height:0 };
         previousState = null;
         state = STATES.DEFAULT;
-        expandProperties = { useBackground:false, backgroundColor:0xffffff, backgroundOpacity:1.0, isModal:false };
+        expandProperties = { width:0, height:0, useCustomClose:false, isModal:false, useBackground:false, backgroundColor:0xffffff, backgroundOpacity:1.0},
         heading = -1;
         keyboardState = false;
         location = null;
@@ -389,6 +431,39 @@
         cacheRemaining = -1;
     };
     
+	var showMraidCloseButton = function(toggle) {
+		if (!adFrame.contentWindow.ormmaview.scriptFound) return;
+		 
+		var doc = adFrame.contentWindow.document;
+		var	closeDiv = doc.getElementById('_mraidCloseDiv');
+		var	targetDiv;
+			
+		closeDiv.style.position = 'absolute';
+		closeDiv.style.left = (maxSize.width - 50) + 'px';
+		closeDiv.style.top = '0px'
+		closeDiv.style.width = '50px'
+		closeDiv.style.height = '50px';
+		closeDiv.style.display = 'none';
+		closeDiv.style.zIndex = 999999;
+		closeDiv.style.cursor = 'pointer';
+
+		if (!adFrame.contentWindow.mraid.getExpandProperties().useCustomClose) {
+			closeDiv.style.background = 'red';
+			closeDiv.style.color = 'white';
+			closeDiv.style.textAlign = 'center';
+			closeDiv.innerHTML = 'close';
+		}
+	
+		if (toggle) {
+			closeDiv.style.display = 'block';		
+			broadcastEvent ('info', 'adding MRAID close button');
+		} else {
+			closeDiv.style.display = 'none';
+			broadcastEvent ('info', 'removing MRAID close button');
+		}
+		/* @todo: ad not closing when user clicks the MRAID close button */
+	};
+	
     var loadAd = function() {
         reset();
         
@@ -403,7 +478,8 @@
         
 		if (useHtml) {
 			var doc = adFrame.contentWindow.document;
-			doc.body.innerHTML = '<body><div></div>'+adHtml+'</body>';
+			doc.body.innerHTML = '<body style="margin: 0px;"><div id="_mraidCloseDiv" onclick="mraid.close()"></div>'+adHtml+'</body>';
+			doc.body.style.margin = '0px';
 			
 			var scripts = doc.body.getElementsByTagName("script");
 			var scriptsCount=scripts.length;
@@ -448,7 +524,7 @@
         adBridge = bridge;
         adController = controller;
         
-        adBridge.addEventListener('activate', function(service) {
+        bridge.addEventListener('activate', function(service) {
             active[service] = true;
         }, this);
     
@@ -466,6 +542,7 @@
             size = { width:dimensions.width, height:dimensions.height };
             state = STATES.EXPANDED;
             resizeAd(dimensions);
+			showMraidCloseButton(true);
             adBridge.pushChange({ size:size, state:state });
         }, this);
         
@@ -473,6 +550,7 @@
             size = { width:previousPosition.width, height:previousPosition.height };
             state = previousState;
             resizeAd(previousPosition);
+			showMraidCloseButton(false);
             adBridge.pushChange({ size:size, state:state });
         }, this);
         
@@ -505,6 +583,7 @@
         
         bridge.addEventListener('setExpandProperties', function(properties) {
             broadcastEvent('info', 'setting expand properties to ' + stringify(properties));
+			adBridge.pushChange({'expandProperties':properties});
         }, this);
         
         bridge.addEventListener('createEvent', function(date, title, body) {
@@ -531,16 +610,8 @@
             broadcastEvent('info', 'setting shake properties to ' + stringify(properties));
         }, this);
         
-        bridge.addEventListener('addAsset', function(URL, alias) {
-            broadcastEvent('info', 'adding alias ' + alias + ' for asset ' + URL);
-        }, this);
-        
         bridge.addEventListener('request', function(uri, display) {
             broadcastEvent('info', 'requesting ' + uri + ' with display ' + display);
-        }, this);
-        
-        bridge.addEventListener('removeAsset', function(alias) {
-            broadcastEvent('info', 'removing asset alias ' + alias);
         }, this);
         
         controller.addEventListener('info', function(message) {
@@ -552,18 +623,18 @@
         }, this);
         
         var initProps = {
-            state:state,
+			state:STATES.LOADING,
             screenSize:screenSize,
             orientation:orientation,
             size:size,
             defaultPosition:defaultPosition,
             maxSize:maxSize,
             expandProperties:expandProperties,
-            supports:supports,
-            cacheRemaining:cacheRemaining
+            supports:supports
         };
         if (shakeProperties) initProps.shakeProperties = shakeProperties;
         bridge.pushChange(initProps);
+		bridge.pushChange({ state:state });
     };
     
     var initAdFrame = function() {
