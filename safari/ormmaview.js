@@ -362,7 +362,8 @@ INFO No ORMMAReady callback found (timeout of 10000ms occurred), assume use of r
     ormmaview.render = function() {
         broadcastEvent('info', 'rendering');
         
-        if (!adFrame || !adWindow || !adWindow.document) {
+        if (!adFrame || !adWindow || !adWindow.document ||
+                !adFrame.contentWindow) {
             broadcastEvent('info', 'creating adWindow');
             adWindow = window.open('safari/device.html', 'adWindow', 'left=1000,width='+screenSize.width+',height='+screenSize.height+',menubar=no,location=no,toolbar=no,status=no,personalbar=no,resizable=no,scrollbars=no,chrome=no,all=no');
             adWindow.onload = function() {
@@ -486,7 +487,7 @@ INFO No ORMMAReady callback found (timeout of 10000ms occurred), assume use of r
 			for (var i=0; i<scriptsCount; i++){
 				var script = doc.createElement('script');
 				script.type = "text/javascript";
-				if (scripts[i].text === '') {
+				if (scripts[i].src !== '') {
 					script.src = scripts[i].src;
 				} else {
 					script.text = scripts[i].text;
